@@ -43,6 +43,17 @@ int printusage(char * const *argv)
 		"          3x3   5x5   7x7   9x9\n\n"
 
 		"  -s    Set the scale of the generated map. Default is 2.0\n\n"
+
+		// FIXME
+		// Can we get someone who knows something about colorspace to provide more user-friendly
+		// descriptions of these options?
+		"  -h    Set the height input. Valid options are:\n"
+		"          rgb      - Key RGB (The default)\n"
+		"          r  g  b  - red, green, or blue single channel\n"
+		"          biased, min, max  - Biased RGB, RGB Min, RGB Max\n"
+		"          colorspace, normalize,     - Colorspace, Normalize Only\n"
+		"          dudv, height - Du/Dv to normal, Heightmap"
+
 		, argv[0]);
 	return -1;
 }
@@ -50,12 +61,12 @@ int printusage(char * const *argv)
 int main(int argc, char * const * argv) {
 
 	// Get command line options
-	const char *filtervalue = NULL;
+	const char *filtervalue = NULL, *heightsourcevalue = NULL;
 	double scalevalue = DEFAULT_SCALE;
 	opterr = 0;
 	int c;
 
-	while ((c = getopt(argc, argv, "f:s:")) != -1)
+	while ((c = getopt(argc, argv, "f:s:h:")) != -1)
 	{
 		switch (c)
 		{
@@ -69,6 +80,10 @@ int main(int argc, char * const * argv) {
 				fprintf( stderr, "Scale \"%s\" must be a positive real number. Defaulting to %f\n", optarg, DEFAULT_SCALE);
 				scalevalue = DEFAULT_SCALE;
 			}
+			break;
+
+		case 'h':
+			heightsourcevalue = optarg;
 			break;
 
 		case '?':
@@ -102,13 +117,12 @@ int main(int argc, char * const * argv) {
 
     // TODO: expose more options via command line switches.
 	NormalmapVals config = {
-		INITIALIZE_STRUCT_FIELD(filter, FILTER_NONE),
 		INITIALIZE_STRUCT_FIELD(wrap, false),
-		INITIALIZE_STRUCT_FIELD(conversion, CONVERT_RED),
 		INITIALIZE_STRUCT_FIELD(scale, scalevalue),
 		INITIALIZE_STRUCT_FIELD(dudv, DUDV_8BIT_UNSIGNED)
     };
 
+	// Filter
 	if (filtervalue == NULL || !STRCMPI(filtervalue, "none")) {
 		config.filter = FILTER_NONE;
 	}
@@ -138,6 +152,41 @@ int main(int argc, char * const * argv) {
 	}
 	else {
 		fprintf(stderr, "Warning: Unknown filter type \"%s\". defaulting to \"none\".", filtervalue);
+	}
+
+	// Height Source
+	if (heightsourcevalue == NULL || !STRCMPI(heightsourcevalue, "rgb")) {
+		config.filter = CONVERT_KEY_RGB;
+	}
+	else if (!STRCMPI(heightsourcevalue, "r")) {
+		config.filter = CONVERT_RED;
+	}
+	else if (!STRCMPI(heightsourcevalue, "g")) {
+		config.filter = CONVERT_GREEN;
+	}
+	else if (!STRCMPI(heightsourcevalue, "b")) {
+		config.filter = CONVERT_BLUE;
+	}
+	else if (!STRCMPI(heightsourcevalue, "biased")) {
+		config.filter = CONVERT_BIASED_RGB;
+	}
+	else if (!STRCMPI(heightsourcevalue, "min")) {
+		config.filter = CONVERT_MIN_RGB;
+	}
+	else if (!STRCMPI(heightsourcevalue, "max")) {
+		config.filter = CONVERT_MAX_RGB;
+	}
+	else if (!STRCMPI(heightsourcevalue, "colorspace")) {
+		config.filter = CONVERT_COLORSPACE;
+	}
+	else if (!STRCMPI(heightsourcevalue, "normalize")) {
+		config.filter = CONVERT_NORMALIZE_ONLY;
+	}
+	else if (!STRCMPI(heightsourcevalue, "dudv")) {
+		config.filter = CONVERT_DUDV_TO_NORMAL;
+	}
+	else if (!STRCMPI(heightsourcevalue, "height")) {
+		config.filter = CONVERT_HEIGHTMAP;
 	}
 
     int32_t result;

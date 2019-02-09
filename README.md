@@ -24,18 +24,17 @@ The following settings are provided by command line arguments:
   * Sobel 3x3, 5x5
   * Prewitt 3x3, 5x5,
   * Generic 3x3, 5x5, 7x7, 9x9
-* Scale *default = 2.0*
+* `-s` Scale *default = 2.0*
+* `-h` Height source:
+  * Luminance
+  * Unbias RGB
+  * Red *default*, Green or Blue channel
+  * Alpha channel: height, height inverted
 
 Run the program without any arguments for details on how to use them.
 
 In this version, you must update `main.c` and rebuild to change the other following settings:
 
-
-* Height source:
-  * Luminance
-  * Unbias RGB
-  * Red *default*, Green or Blue channel
-  * Alpha channel: height, height inverted
 * Output type:
   * du/dv 8-bit signed *default*, 8-bit unsigned, 16-bit signed, 16-bit unsigned
   * true "normalized" normal
