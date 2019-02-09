@@ -40,7 +40,9 @@ int printusage(char * const *argv)
 		"          none (the default)\n"
 		"          sobel3x3    sobel5x5\n"
 		"          prewitt3x3  prewitt5x5\n"
-		"          3x3   5x5   7x7   9x9\n"
+		"          3x3   5x5   7x7   9x9\n\n"
+
+		"  -s    Set the scale of the generated map. Default is 2.0\n\n"
 		, argv[0]);
 	return -1;
 }
