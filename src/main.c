@@ -24,6 +24,8 @@
 #define STRCMPI strcmpi
 #endif
 
+#define DEFAULT_SCALE 2.0
+
 const char *get_filename_ext(const char *filename) {
     const char *dot = strrchr(filename, '.');
     if (!dot || dot == filename) return "";
@@ -35,7 +37,7 @@ int printusage(char * const *argv)
 	fprintf(stderr, "Usage: %s [OPTIONS] <heightmap_filename> <bumpmap_filename>\n\n"
 		"OPTIONS:\n"
 		"  -f    Set filter type. Valid options are:\n"
-		"          none\n"
+		"          none (the default)\n"
 		"          sobel3x3    sobel5x5\n"
 		"          prewitt3x3  prewitt5x5\n"
 		"          3x3   5x5   7x7   9x9\n"
@@ -47,15 +49,24 @@ int main(int argc, char * const * argv) {
 
 	// Get command line options
 	const char *filtervalue = NULL;
+	double scalevalue = DEFAULT_SCALE;
 	opterr = 0;
 	int c;
 
-	while ((c = getopt(argc, argv, "f:")) != -1)
+	while ((c = getopt(argc, argv, "f:s:")) != -1)
 	{
 		switch (c)
 		{
 		case 'f':
 			filtervalue = optarg;
+			break;
+
+		case 's':
+			scalevalue = atof(optarg);
+			if (scalevalue <= 0.0) {
+				fprintf( stderr, "Scale \"%s\" must be a positive real number. Defaulting to %f\n", optarg, DEFAULT_SCALE);
+				scalevalue = DEFAULT_SCALE;
+			}
 			break;
 
 		case '?':
@@ -87,12 +98,12 @@ int main(int argc, char * const * argv) {
     uint8_t *image_out = malloc(x * y * 4);
 
 
-    // TODO: expose more optiosn via command line switches.
-    NormalmapVals config = {
+    // TODO: expose more options via command line switches.
+	NormalmapVals config = {
 		INITIALIZE_STRUCT_FIELD(filter, FILTER_NONE),
 		INITIALIZE_STRUCT_FIELD(wrap, false),
 		INITIALIZE_STRUCT_FIELD(conversion, CONVERT_RED),
-		INITIALIZE_STRUCT_FIELD(scale, 2.0f),
+		INITIALIZE_STRUCT_FIELD(scale, scalevalue),
 		INITIALIZE_STRUCT_FIELD(dudv, DUDV_8BIT_UNSIGNED)
     };
 

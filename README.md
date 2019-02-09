@@ -17,19 +17,20 @@ The output will be an unfiltered, 8-bit unsigned du/dv map, which can be used as
 
 The underlying normal map generation code is inherited from The GIMP and is considerably more flexible.
 
-The following setting is provided by a command line argument:
+The following settings are provided by command line arguments:
 
 * `-f` Sampler filter
   * None *default*
   * Sobel 3x3, 5x5
   * Prewitt 3x3, 5x5,
   * Generic 3x3, 5x5, 7x7, 9x9
+* Scale *default = 2.0*
 
-Run the program without any arguments for details on how to use it.
+Run the program without any arguments for details on how to use them.
 
 In this version, you must update `main.c` and rebuild to change the other following settings:
 
-* Scale *default = 2.0*
+
 * Height source:
   * Luminance
   * Unbias RGB
