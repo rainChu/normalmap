@@ -11,10 +11,13 @@ set(SOURCE_FILES
         src/main.c
         src/stb_image.c
         src/normalmap.c
+        src/getopt_msvs.c
 
         include/normalmap.h
         include/stb_image_write.h
-        src/stb_image_write.c
-        include/unistd_msvs.h)
+        include/getopt_msvs.h
+        include/unistd_msvs.h
+
+        src/stb_image_write.c)
 
 add_executable(normalmap ${SOURCE_FILES})
