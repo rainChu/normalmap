@@ -22,7 +22,13 @@
 #include <string.h>
 #include <inttypes.h>
 #include <time.h>
+
+#ifdef _MSC_VER
+#include "unistd_msvs.h"
+#else
 #include <unistd.h>
+#endif
+
 #include <math.h>
 #include <normalmap.h>
 

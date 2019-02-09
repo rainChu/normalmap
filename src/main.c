@@ -2,11 +2,22 @@
 #include <stdlib.h>
 #include <stb_image.h>
 #include <assert.h>
+
+#ifdef _MSC_VER
+#include <memory.h>
+#else
 #include <mem.h>
+#endif
+
 #include <stb_image_write.h>
 #include <normalmap.h>
 #include <stdbool.h>
 
+#ifdef _MSC_VER
+#define INITIALIZE_STRUCT_FIELD(a, b) .a=b
+#else
+#define INITIALIZE_STRUCT_FIELD(a, b) a:b
+#endif
 
 const char *get_filename_ext(const char *filename) {
     const char *dot = strrchr(filename, '.');
@@ -33,12 +44,14 @@ int main(int argc, const char **argv) {
 
     // TODO: expose this via command line switches.
     NormalmapVals config = {
-            filter: FILTER_NONE,
-            wrap: false,
-            conversion: CONVERT_RED,
-            scale: 2.0f,
-            dudv: DUDV_8BIT_UNSIGNED
+		INITIALIZE_STRUCT_FIELD(filter, FILTER_NONE),
+		INITIALIZE_STRUCT_FIELD(wrap, false),
+		INITIALIZE_STRUCT_FIELD(conversion, CONVERT_RED),
+		INITIALIZE_STRUCT_FIELD(scale, 2.0f),
+		INITIALIZE_STRUCT_FIELD(dudv, DUDV_8BIT_UNSIGNED)
     };
+
+	//config.filter = FILTER_NONE;
 
     int32_t result;
     if ((result = normalmap(image_in, image_out, x, y, config)) != 0) {

@@ -5,7 +5,7 @@ Command line utility to convert height maps to DU-DV normal maps.
 
 [Windows binary](https://github.com/justinbowes/normalmap/releases) is provided.
 
-Should compile and run on any modern GCC or Clang compiler. CMake build script is provided.
+Should compile and run on most modern compilers (GCC Clang, and MSVS). CMake build script is provided.
 
 ## Usage
 
