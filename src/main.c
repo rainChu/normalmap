@@ -14,11 +14,14 @@
 #include <stb_image_write.h>
 #include <normalmap.h>
 #include <stdbool.h>
+#include <string.h>
 
 #ifdef _MSC_VER
 #define INITIALIZE_STRUCT_FIELD(a, b) .a=b
+#define STRCMPI _strcmpi
 #else
 #define INITIALIZE_STRUCT_FIELD(a, b) a:b
+#define STRCMPI strcmpi
 #endif
 
 const char *get_filename_ext(const char *filename) {
@@ -93,31 +96,31 @@ int main(int argc, char * const * argv) {
 		INITIALIZE_STRUCT_FIELD(dudv, DUDV_8BIT_UNSIGNED)
     };
 
-	if (filtervalue == NULL || !strcmp(filtervalue, "none")) {
+	if (filtervalue == NULL || !STRCMPI(filtervalue, "none")) {
 		config.filter = FILTER_NONE;
 	}
-	else if (!strcmp(filtervalue, "sobel3x3")) {
+	else if (!STRCMPI(filtervalue, "sobel3x3")) {
 		config.filter = FILTER_SOBEL_3x3;
 	}
-	else if (!strcmp(filtervalue, "sobel5x5")) {
+	else if (!STRCMPI(filtervalue, "sobel5x5")) {
 		config.filter = FILTER_SOBEL_5x5;
 	}
-	else if (!strcmp(filtervalue, "prewitt3x3")) {
+	else if (!STRCMPI(filtervalue, "prewitt3x3")) {
 		config.filter = FILTER_PREWITT_3x3;
 	}
-	else if (!strcmp(filtervalue, "prewitt5x5")) {
+	else if (!STRCMPI(filtervalue, "prewitt5x5")) {
 		config.filter = FILTER_PREWITT_5x5;
 	}
-	else if (!strcmp(filtervalue, "3x3")) {
+	else if (!STRCMPI(filtervalue, "3x3")) {
 		config.filter = FILTER_3x3;
 	}
-	else if (!strcmp(filtervalue, "5x5")) {
+	else if (!STRCMPI(filtervalue, "5x5")) {
 		config.filter = FILTER_5x5;
 	}
-	else if (!strcmp(filtervalue, "7x7")) {
+	else if (!STRCMPI(filtervalue, "7x7")) {
 		config.filter = FILTER_7x7;
 	}
-	else if (!strcmp(filtervalue, "9x9")) {
+	else if (!STRCMPI(filtervalue, "9x9")) {
 		config.filter = FILTER_9x9;
 	}
 	else {
@@ -130,15 +133,15 @@ int main(int argc, char * const * argv) {
     }
 
     const char *ext = get_filename_ext(outfile);
-    if (strcmpi("png", ext) == 0) {
+    if (STRCMPI("png", ext) == 0) {
         if (!stbi_write_png(outfile, x, y, 4, image_out, 0)) {
             fprintf(stderr, "Unable to write PNG %s", outfile);
         }
-    } else if (strcmpi("bmp", ext) == 0) {
+    } else if (STRCMPI("bmp", ext) == 0) {
         if (!stbi_write_bmp(outfile, x, y, 4, image_out)) {
             fprintf(stderr, "Unable to write BMP %s", outfile);
         }
-    } else if (strcmpi("tga", ext) == 0) {
+    } else if (STRCMPI("tga", ext) == 0) {
         if (!stbi_write_tga(outfile, x, y, 4, image_out)) {
             fprintf(stderr, "Unable to write TGA %s", outfile);
         }
