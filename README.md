@@ -30,6 +30,7 @@ The following settings are provided by command line arguments:
   * Unbias RGB
   * Red *default*, Green or Blue channel
   * Alpha channel: height, height inverted
+* -`w` Wrap output
 
 Run the program without any arguments for details on how to use them.
 

@@ -52,7 +52,9 @@ int printusage(char * const *argv)
 		"          r  g  b  - red, green, or blue single channel\n"
 		"          biased, min, max  - Biased RGB, RGB Min, RGB Max\n"
 		"          colorspace, normalize,     - Colorspace, Normalize Only\n"
-		"          dudv, height - Du/Dv to normal, Heightmap"
+		"          dudv, height - Du/Dv to normal, Heightmap\n\n"
+
+		" -w    Wrap the output.\n"
 
 		, argv[0]);
 	return -1;
@@ -66,7 +68,9 @@ int main(int argc, char * const * argv) {
 	opterr = 0;
 	int c;
 
-	while ((c = getopt(argc, argv, "f:s:h:")) != -1)
+	int wrapvalue = 0;
+
+	while ((c = getopt(argc, argv, "f:s:h:w")) != -1)
 	{
 		switch (c)
 		{
@@ -80,6 +84,10 @@ int main(int argc, char * const * argv) {
 				fprintf( stderr, "Scale \"%s\" must be a positive real number. Defaulting to %f\n", optarg, DEFAULT_SCALE);
 				scalevalue = DEFAULT_SCALE;
 			}
+			break;
+
+		case 'w':
+			wrapvalue = 1;
 			break;
 
 		case 'h':
@@ -117,7 +125,7 @@ int main(int argc, char * const * argv) {
 
     // TODO: expose more options via command line switches.
 	NormalmapVals config = {
-		INITIALIZE_STRUCT_FIELD(wrap, false),
+		INITIALIZE_STRUCT_FIELD(wrap, wrapvalue),
 		INITIALIZE_STRUCT_FIELD(scale, scalevalue),
 		INITIALIZE_STRUCT_FIELD(dudv, DUDV_8BIT_UNSIGNED)
     };
